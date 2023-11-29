@@ -1,5 +1,5 @@
 <template>
-    <h1>Hola Mundo</h1>
+  <div></div>
 </template>
 
 <sript lang="ts" setup>
