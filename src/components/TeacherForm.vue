@@ -4,13 +4,39 @@
     <div><label>Nombre: </label><input tabindex="text" v-model="teacher.teacherName"/></div>
     <div><label>Apellidos: </label><input tabindex="text" v-model="teacher.surname"/></div>
     <div><label>DNI / NIF: </label><input tabindex="text" v-model="teacher.dni"/></div>
-    <div><label>Materias: </label><input tabindex="text" v-model="subject"/><button>Agregar</button></div>
+    <div><label>Materias: </label><input tabindex="text" v-model="subject"/><button @click="handleSubject()">Agregar</button></div>
+    <div>
+        <ul>
+            <li v-for="(elm, index) in teacher.subjects" :key="index">{{ elm }}</li>
+        </ul>
+    </div>
     <input type="checkbox" v-model="teacher.doc"> Documentación entregada
     
-    <button>Agregar</button>
+    <button @click="handleAddTeacher">Agregar</button>
   </section>
   <section>
     <h3>Listado de profesores</h3>
+    <table>
+        <tr>
+            <th>Nombre</th>
+            <th>Apellidos</th>
+            <th>DNI / NIF</th>
+            <th>Materias</th>
+            <th>Documentación Entregada</th>
+        </tr>
+        <tr v-for="elm in teachers" :key="elm.dni">
+            <th>{{ elm.teacherName }}</th>
+            <th> {{ elm.surname }}</th>
+            <th> {{ elm.dni }}</th>
+            <th>
+                <ul>
+                    <li v-for="(item, index) in elm.subjects" :key="index">{{ item }}</li>
+                </ul>
+            </th>
+            <th v-if="elm.doc">Entregada</th>
+            <th v-else>No Entregada</th>
+        </tr>
+    </table>
   </section>
 </template>
 
@@ -36,6 +62,28 @@
     let teachers:Ref<Array<ITeacher>> = ref([])
 
     let subject: Ref<string> = ref('')
+
+    const handleSubject = () => {
+        teacher.value.subjects.push(subject.value)
+        subject.value = ""
+    }
+
+    const handleAddTeacher = () => {
+        teachers.value.push({
+            teacherName: teacher.value.teacherName,
+            surname: teacher.value.surname,
+            dni: teacher.value.dni,
+            subjects: teacher.value.subjects,
+            doc: teacher.value.doc,
+
+        })
+        teacher.value.teacherName = ""
+        teacher.value.surname = ""
+        teacher.value.dni = ""
+        teacher.value.subjects = []
+        teacher.value.doc = false
+
+    }
 </script>
 
 <style scoped>
